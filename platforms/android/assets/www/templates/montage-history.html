@@ -1,0 +1,200 @@
+<ion-view view-title="{{'kEventMontage' | translate}}" cache-view="false" hide-nav-bar="{{minimal}}">
+    <ion-nav-buttons side="left">
+        <button class="button button-icon button-clear ion-navicon" ng-click="openMenu()"></button>
+
+        <button data-badge="{{$root.alarmCount}}" class="animated infinite tada button button-icon button-clear ion-ios-bell notification-badge" ng-click="handleAlarms();" ng-if="$root.isAlarm"></button>
+    </ion-nav-buttons>
+
+
+
+    <ion-nav-buttons side="right">
+
+        <button ng-class="packMontage?'button button-icon button-clear ion-android-more-vertical':'button button-icon button-clear ion-android-more-horizontal'" ng-click="toggleMontageDisplayOrder();">&nbsp;
+        </button>
+
+        <!--<span class="rotate-button">
+                <button class="button button-icon button-clear ion-arrow-swap"
+                        ng-click="toggleReorder();">
+                </button>
+        </span>-->
+
+
+    </ion-nav-buttons>
+
+    <ion-content has-bouncing="false" style="background-color:#444444">
+
+
+
+        <div class="timeline_text" ion-datetime-picker title="From" am-pm={{!loginData.use24hr}} ng-model="datetimeValueFrom.value" ng-change="dateChanged()">
+            <b>{{'kFrom' | translate}} : </b>{{datetimeValueFrom.value | date: timeFormat}}
+        </div>
+
+        <div class="timeline_text" ion-datetime-picker am-pm={{!loginData.use24hr}} ng-model="datetimeValueTo.value" ng-change="dateChanged()">
+            <b>{{'kTo' | translate}}: </b>{{datetimeValueTo.value | date: timeFormat}} @ {{sliderVal.rate}}x
+            <div ng-if="$root.platformOS != 'ios'">({{'kChromeMax' | translate}})</div>
+        </div>
+
+
+
+        <div class="range">
+            <i style="color:#bbbbbb" class="icon ion-grid"></i>
+            <input type="range" ng-model="slider.monsize" min="1" max="9" ng-change="sliderChanged(slider.monsize)">
+            <i style="color:#bbbbbb" class="icon ion-image"></i>
+
+        </div>
+
+        <div ng-style="packMontage ? { '-webkit-column-count':10-slider.monsize,'-webkit-column-gap':'0px','line-height':'0px','-webkit-column-fill': 'balance', 'column-fill': 'balance' } : {'-webkit-column-count':10-slider.monsize,'-webkit-column-gap':'0px','line-height':'0px','display':'-webkit-flex','-webkit-flex-direction':'row','flex-direction':'row', 'flex-wrap':'wrap' }">
+
+            <!-- <span ng-repeat="monitor in MontageMonitors|limitTo: monLimit" ng- -->
+            <span ng-repeat="monitor in MontageMonitors|limitTo: monLimit" ng-if="monitor.Monitor.Function!='None' && monitor.Monitor.listDisplay!='noshow' && monitor.Monitor.Enabled !='0'"> 
+                
+                
+                <div style="position: relative;width:{{devWidth/(10-slider.monsize)}}px;">
+                     
+                    <div ng-if="$root.authSession!='undefined'">
+                        <div ng-if = "monitor.Monitor.eventUrl == 'img/noevent.png' && !sliderVal.hideNoEvents">
+                           
+                            <!-- make sure we don't use id here
+                            -- or we lose the handle for cleanup forever!-->
+                            <img  image-spinner-src="{{monitor.Monitor.eventUrl}}"  image-spinner-loader="lines" style="
+                                width: 100% !important;
+                                height: auto !important;" />
+                            <div   style="position:absolute; bottom:0%; right:0%;white-space:nowrap;overflow:hidden;" 
+                             class="header">
+                            &nbsp;<i class="ion-ios-videocam-outline"></i>
+                           {{monitor.Monitor.Name}}&nbsp;
+                            </div>
+                        </div>
+
+                        <div style="position:relative" ng-if = "monitor.Monitor.eventUrl != 'img/noevent.png' && monitor.Monitor.connKey !=''">
+
+                            <img  id="img-{{$index}}" image-spinner-src="{{monitor.Monitor.eventUrl}}{{$root.authSession}}"  image-spinner-loader="lines" style="
+                            width: 100% !important;
+                            height: auto !important;" on-tap="togglePause(monitor.Monitor.Id)" />
+                            
+                            
+
+                            <div   style="position:absolute; bottom:0%; right:0%;white-space:nowrap;overflow:hidden;" 
+                             class="header">
+                            &nbsp;<i class="ion-ios-videocam-outline"></i>
+                               {{monitor.Monitor.Name}}&nbsp;
+                            </div>
+
+                             <div  ng-if="sliderVal.showTimeline" style=" position:absolute; bottom:15px; right:0%;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;" 
+                             class="header-event-id" id="{{monitor.Monitor.Id}}-timeline">
+                            &nbsp;<i class="ion-clock"></i>
+                               {{prettifyDate(monitor.Monitor.eventUrlTime)}}&nbsp;
+                            </div>
+                            
+                            <div  ng-if="monitor.isPaused" style="position:absolute; top:50%; left:50%;white-space:nowrap;overflow:hidden;" 
+                             class="header-paused">
+                            &nbsp;<i class="ion-pause"></i>
+                               {{'kPaused' | translate}}&nbsp;
+                            </div>
+                            
+                            <!--<div ng-if="!monitor.isPaused"
+                                style="position:absolute; bottom:35px; right:0%;white-space:nowrap;overflow:hidden;" class="header-event-id">paused
+                            </div>-->
+			  
+			  
+                        </div>
+                    </div> <!-- valid auth session &!background -->
+
+                    <div ng-if="!$root.authSession=='undefined' || isBackground()">
+                        <img  image-spinner-src="img/pausevideo.png" 
+                             style="width: 100% !important;height: auto !important;" />
+                    </div>
+                </div>
+            </span>
+        </div>
+
+        <ion-item ng-show="!MontageMonitors.length">
+           {{'kNoMonitors' | translate }}
+        </ion-item>
+
+
+
+    </ion-content>
+
+    <div ng-show="minimal">
+        <nav mfb-menu position="br" effect="zoomin" label="collapse" active-icon="ion-chevron-down" resting-icon="ion-chevron-up" toggling-method="click">
+
+            <button mfb-button icon="ion-arrow-expand" label="increase size" ng-click="changeSize(-1)">
+            </button>
+            <button mfb-button icon="ion-arrow-shrink" label="decrease size" ng-click="changeSize(1)">
+            </button>
+            <button mfb-button icon="ion-refresh" label="refresh" ng-click="reloadView();">
+            </button>
+            <button mfb-button icon="ion-close" label="exit full screen" ng-click="switchMinimal()">
+            </button>
+        </nav>
+
+        <span class="modal-alarm-badge">
+            <a data-badge="{{$root.alarmCount}}" class="animated infinite tada button icon  ion-ios-bell notification-badge button-assertive" 
+                    ng-click="handleAlarmsWhileMinimized();" ng-if="$root.isAlarm"></a>
+        </span>
+
+    </div>
+
+    <ion-pull-up-footer class="zmPullup" on-expand="footerExpand()" on-minimize="footerCollapse()" on-collapse="footerCollapse()" initial-state="minimized" default-behavior="expand">
+        <ion-pull-up-handle width="100" height="25" toggle="ion-chevron-up ion-chevron-down" style="border-radius: 25px 25px 0 0">
+            <i class="icon ion-chevron-up"></i>
+        </ion-pull-up-handle>
+        <ion-pull-up-bar>
+            <h1 class="title" ion-pull-up-trigger>{{'kEventMontage' | translate}}</h1>
+        </ion-pull-up-bar>
+        <ion-pull-up-content scroll="true">
+
+
+            <div class="list list-inset">
+
+
+                <ion-toggle ng-model="sliderVal.hideNoEvents" ng-checked="{{sliderVal.hideNoEvents}}" toggle-class="toggle-dark"><span class="item-text-wrap">{{'kHideMonsWithoutEvents' | translate}}</span></ion-toggle>
+
+
+
+
+                <!--<div  class="item item-divider" ion-datetime-picker ng-model="datetimeValueFrom.value">
+                    Tap to change: {{datetimeValueFrom.value| date: "yyyy-MMM-dd hh:mma"}}
+                </div>-->
+
+
+
+
+
+                <div class="row">
+                    <div class="col col-75">
+                        <br/>
+                        <div style="width:90%;color:black;">
+                            <input ng-model="sliderVal.rate" type="text" id="mySlider6" slider options="slider_modal_options_rate" />
+                        </div>
+                        <br/>
+                    </div>
+                    <div class="col col-25" style="background-color:#AEA8D3;text-align:center">
+                        {{'kSpeed' | translate }}
+                    </div>
+                </div>
+
+                <div class="item item-divider">{{'kTimeline' | translate}}</div>
+
+                <ion-item>
+                    <div ion-datetime-picker title="From" am-pm={{!loginData.use24hr}} ng-model="datetimeValueFrom.value">
+                        <b>{{'kFrom' | translate }}: </b>{{datetimeValueFrom.value | date: timeFormat}}
+                    </div>
+                </ion-item>
+
+                <ion-item>
+                    <div ion-datetime-picker am-pm={{!loginData.use24hr}} ng-model="datetimeValueTo.value">
+                        <b>{{'kTo' | translate}}: </b>{{datetimeValueTo.value | date: timeFormat}}
+                    </div>
+                </ion-item>
+
+            </div>
+        </ion-pull-up-content>
+    </ion-pull-up-footer>
+
+
+
+
+
+</ion-view>

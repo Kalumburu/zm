@@ -1,0 +1,96 @@
+{
+  "name": "zmninja",
+  "version": "1.0.0",
+  "description": "zmNinja: An Ionic project",
+  "dependencies": {
+    "@angular/common": "^2.0.0-rc.3",
+    "@angular/compiler": "^2.0.0-rc.3",
+    "@angular/core": "^2.0.0-rc.3",
+    "@angular/http": "^2.0.0-rc.3",
+    "@angular/platform-browser": "^2.0.0-rc.3",
+    "@angular/platform-browser-dynamic": "^2.0.0-rc.3",
+    "@angular/router": "^2.0.0-rc.2",
+    "async": "^1.4.2",
+    "gulp": "^3.5.6",
+    "gulp-concat": "^2.2.0",
+    "gulp-minify-css": "^0.3.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-sass": "^2.0.0",
+    "ionic-angular": "^2.0.0-beta.10",
+    "ionic-app-lib": "^0.7.0"
+  },
+  "devDependencies": {
+    "bower": "^1.3.3",
+    "clean-css": "^3.4.0",
+    "gulp-angular-templatecache": "^1.6.0",
+    "gulp-util": "^2.2.14",
+    "shelljs": "^0.3.0",
+    "jshint": "^2.8.0",
+    "ng-annotate": "^1.0.2",
+    "uglify-js": "^2.4.24"
+  },
+  "cordovaPlugins": [
+    {
+      "id": "phonegap-plugin-push",
+      "locator": "phonegap-plugin-push",
+      "variables": {
+        "SENDER_ID": "710936220256"
+      }
+    },
+    "cordova-plugin-app-version",
+    "cordova-plugin-file",
+    "cordova-plugin-inappbrowser",
+    "cordova-plugin-ios-longpress-fix",
+    "cordova-plugin-splashscreen",
+    "cordova-plugin-touchid",
+    "cordova-plugin-websocket",
+    "cordova-plugin-whitelist",
+    "ionic-plugin-keyboard",
+    {
+      "locator": "https://github.com/EddyVerbruggen/Insomnia-PhoneGap-Plugin.git",
+      "id": "cordova-plugin-insomnia"
+    },
+    "cordova-plugin-pin-dialog",
+    {
+      "locator": "https://github.com/devgeeks/Canvas2ImagePlugin.git",
+      "id": "org.devgeeks.Canvas2ImagePlugin"
+    },
+    "cordova-plugin-statusbar",
+    {
+      "locator": "https://github.com/Telerik-Verified-Plugins/NativePageTransitions",
+      "id": "com.telerik.plugins.nativepagetransitions"
+    },
+    {
+      "locator": "https://git-wip-us.apache.org/repos/asf/cordova-plugin-globalization.git",
+      "id": "cordova-plugin-globalization"
+    },
+    "cordova-plugin-console",
+    {
+      "locator": "https://github.com/jcjee/email-composer",
+      "id": "com.jcjee.plugins.emailcomposer"
+    },
+    {
+      "locator": "https://github.com/pliablepixels/cordova-plugin-media",
+      "id": "org.apache.cordova.media"
+    },
+    {
+      "locator": "https://github.com/hypery2k/cordova-certificate-plugin",
+      "id": "cordova-plugin-certificates"
+    }
+  ],
+  "cordovaPlatforms": [
+    {},
+    "android",
+    "ios",
+    {
+      "platform": "ios",
+      "version": "",
+      "locator": "ios"
+    },
+    {
+      "platform": "android",
+      "version": "",
+      "locator": "android"
+    }
+  ]
+}
